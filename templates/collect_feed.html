@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collect Images - {{ class_name }}</title>
+    <script>
+        let targetCount = {{ num_images }};
+
+        function saveImage(className) {
+            fetch(`/save_image/${className}?target=${targetCount}`)
+                .then(response => {
+                    if (response.ok) {
+                        updateImageCount(className);
+                    } else {
+                        alert("Failed to save image.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error saving image:", error);
+                    alert("Error saving image.");
+                });
+        }
+
+        function updateImageCount(className) {
+            fetch(`/image_count/${className}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("imageCount").innerText = data.count;
+
+                    if (data.count >= targetCount) {
+                        document.getElementById("saveBtn").disabled = true;
+                        document.getElementById("saveBtn").innerText = "Target Reached";
+                    }
+                });
+        }
+
+        function startCountUpdater(className) {
+            updateImageCount(className);
+            setInterval(() => updateImageCount(className), 3000);
+        }
+    </script>
+</head>
+<body onload="startCountUpdater('{{ class_name }}')">
+    <h1>Collecting Images for "{{ class_name }}"</h1>
+
+    <img src="{{ url_for('video_feed') }}" alt="Live Feed" width="480">
+    <br><br>
+
+    <button id="saveBtn" onclick="saveImage('{{ class_name }}')">Save Image</button>
+    <p>Images Saved: <span id="imageCount">0</span> / {{ num_images }}</p>
+
+    <br>
+    <a href="/">Back to Home</a>
+</body>
+</html>
