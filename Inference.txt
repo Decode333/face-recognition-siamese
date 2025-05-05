@@ -1,0 +1,11 @@
+https://github.com/Decode333/face-recognition-siamese.git
+
+The project has functionalities to collect data, train the model and update the weights and the realtime face detection.
+There are three modes data_collection, train and realtime for the specific functions.
+Using CV2, the frames of images are captured from the camera and saved into class folder.
+The siamese network model gets trained with the captured images and the weights are updated.
+During the realtime face recognition using the camera feed, the class name of the face and the bounding box are shown simultaneously.
+
+For easier processing and training on low end machines, only a light weighted subnetworks are desinged.
+
+With the help of Flask, the above mentioned functions are performed through browser as web application.
